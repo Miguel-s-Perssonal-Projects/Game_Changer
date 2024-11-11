@@ -8,6 +8,7 @@ import { FinishedGamesComponent } from './lists/finished-games/finished-games.co
 import { PlayedGamesComponent } from './lists/played-games/played-games.component';
 import { GameDetailComponent } from './game-details/game-details.component';
 import { ComingSoonComponent } from './comingsoon/comingsoon.component';
+import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [ // Ensure routes are exported
   { path: '', component: HomeComponent }, // Default route
@@ -17,6 +18,7 @@ export const routes: Routes = [ // Ensure routes are exported
   { path: 'finished-games', component: FinishedGamesComponent },
   { path: 'now-play-games', component: NowPlayGamesComponent },
   { path: 'late-play-games', component: LatePlayGamesComponent },
+  { path: 'profile', component: ProfileComponent },
   { path: 'games/:id', component: GameDetailComponent },
   { path: 'coming-soon', component: ComingSoonComponent },
   // Additional routes can be added here
