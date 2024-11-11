@@ -15,7 +15,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./game-card.component.css']
 })
 export class GameCardComponent {
-  @Input() title!: String;
-  @Input() thumbnail!: String;
-  @Input() shortDescription!: String;
+  @Input() title!: string;
+  @Input() thumbnail!: string;
+  @Input() shortDescription!: string;
 }

@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router'; // Import RouterModule
+import { UserServiceService } from '../../app/services/user_services/user-service.service';  // Import your user service~
+import { UserProfile } from '../profile/profile.component';
 
 @Component({
   selector: 'app-navbar',
@@ -36,15 +38,35 @@ import { RouterModule } from '@angular/router'; // Import RouterModule
         <!-- User avatar and name -->
         <div class="user-profile flex items-center space-x-2">
           <a [routerLink]="'/profile'" class="flex items-center space-x-2">
-            <img src="assets/images/avatar.png" alt="User Avatar" class="h-10 w-10 rounded-full">
-            <span class="text-black">User Name</span>
+            <img [src]="userProfile.avatar" alt="User Avatar" class="h-10 w-10 rounded-full">
+            <span class="text-black">{{ userProfile.name }}</span>
           </a>
         </div>
       </div>
     </nav>
-
   `,
   styleUrls: ['./navbar.component.css'],
   imports: [RouterModule] // Add RouterModule here
 })
-export class NavbarComponent {}
+export class NavbarComponent implements OnInit {
+
+  userProfile: UserProfile = {
+    id: '',
+    name: '',
+    email: '',
+    password: '',
+    avatar: '',
+    lists: []
+  };
+
+  constructor(private user_service: UserServiceService) {}
+
+  async ngOnInit() {
+    try {
+      this.userProfile = await this.user_service.getUserProfile();  // Await the Promise to get the games
+      console.log(this.userProfile);  // Log after the data is available
+    } catch (error) {
+      console.error('Error fetching games:', error);  // Handle any errors
+    }
+  }
+}

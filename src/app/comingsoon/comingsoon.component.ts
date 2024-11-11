@@ -17,7 +17,17 @@ import { NavbarComponent } from '../navbar/navbar.component'; // Assuming Navbar
   imports: [NavbarComponent] // Declare Navbar as a dependency
 })
 export class ComingSoonComponent implements OnInit {
-  private colors = ['#1a202c', '#2d3748', '#4a5568', '#718096', '#edf2f7'];
+  private colors = [
+    '#0a0f0a', // Dark green-black
+    '#1d2b1d', // Dark forest green
+    '#2e4532', // Medium green
+    '#415b41', // Slightly lighter green
+    '#537d4e', // Lush green
+    '#6c9a60', // Light green
+    '#87b374', // Greenish tint
+    '#a3c08e', // Pale green
+    '#4b4d45'  // Charcoal green-black
+  ];
   private currentIndex = 0;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
@@ -53,6 +63,6 @@ export class ComingSoonComponent implements OnInit {
       this.currentIndex = (this.currentIndex + 1) % this.colors.length;
       body.style.transition = 'background-color 1s ease-in-out';
       body.style.backgroundColor = this.colors[this.currentIndex];
-    }, 2000); // Change color every 2 seconds
+    }, 10000); // Change color every 2 seconds
   }
 }

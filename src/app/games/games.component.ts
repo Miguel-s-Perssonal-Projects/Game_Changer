@@ -7,33 +7,34 @@ import { GameCardComponent } from '../game-card/game-card.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { GameServiceService } from '../../app/services/game_services/game-service.service'
 
 export interface Game {
-  id: String,
-  title: String,
-  thumbnail: String,
-  status: String,
-  shortDescription: String,
-  description: String,
-  gameUrl: String,
-  genre: String,
-  platform: String,
-  publisher: String,
-  developer: String,
-  releaseDate: String,
-  freetogameProfileUrl: String,
-  screenshot_1: String,
-  screenshot_2: String,
-  screenshot_3: String,
+  id: string,
+  title: string,
+  thumbnail: string,
+  status: string,
+  shortDescription: string,
+  description: string,
+  gameUrl: string,
+  genre: string,
+  platform: string,
+  publisher: string,
+  developer: string,
+  releaseDate: string,
+  freetogameProfileUrl: string,
+  screenshot_1: string,
+  screenshot_2: string,
+  screenshot_3: string,
   system_requirements: SystemRequirements
 }
 
 interface SystemRequirements {
-  os: String,
-  processor: String,
-  memory: String,
-  graphics: String,
-  storage: String
+  os: string,
+  processor: string,
+  memory: string,
+  graphics: string,
+  storage: string
 }
 
 @Component({
@@ -66,20 +67,37 @@ interface SystemRequirements {
 export class GamesComponent implements OnInit {
   games: Game[] = [];
 
-  private colors = ['#1a202c', '#2d3748', '#4a5568', '#718096', '#edf2f7'];
+  // Spectrum of greens and black shades
+  private colors = [
+    '#0a0f0a', // Dark green-black
+    '#1d2b1d', // Dark forest green
+    '#2e4532', // Medium green
+    '#415b41', // Slightly lighter green
+    '#537d4e', // Lush green
+    '#6c9a60', // Light green
+    '#87b374', // Greenish tint
+    '#a3c08e', // Pale green
+    '#4b4d45'  // Charcoal green-black
+  ];
   private currentIndex = 0;
 
-  constructor(private http: HttpClient, private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(private http: HttpClient, private router: Router, private game_service: GameServiceService, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   onCardClick(game: Game): void {
-    // Navigate to the details page with the constellation data passed in the state
+    // Navigate to the details page with the game id
     this.router.navigate(['/games', game.id]);
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      this.createStars(100); // Create stars
+      this.createStars(5); // Create stars
       this.startBackgroundAnimation(); // Start the background color change
+    }
+    try {
+      this.games = await this.game_service.getGames();  // Await the Promise to get the games
+      console.log(this.games);  // Log after the data is available
+    } catch (error) {
+      console.error('Error fetching games:', error);  // Handle any errors
     }
   }
 
@@ -100,13 +118,14 @@ export class GamesComponent implements OnInit {
   }
 
   startBackgroundAnimation() {
-    // Set the body background color and manage transitions
-    const body = document.body;
+    // Get the animated background div
+    const animatedBackground = document.querySelector('.stars') as HTMLElement;
 
     setInterval(() => {
       this.currentIndex = (this.currentIndex + 1) % this.colors.length;
-      body.style.transition = 'background-color 1s ease-in-out'; // Fade effect
-      body.style.backgroundColor = this.colors[this.currentIndex];
-    }, 2000); // Change color every 2 seconds
+      animatedBackground.style.transition = 'background-color 1s ease-in-out'; // Fade effect for background color
+      animatedBackground.style.backgroundColor = this.colors[this.currentIndex];
+    }, 10000); // Change color every 2 seconds
   }
+
 }

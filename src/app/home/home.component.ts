@@ -8,16 +8,28 @@ import { NavbarComponent } from '../navbar/navbar.component'; // Import your Nav
   template: `
     <app-navbar></app-navbar>
     <div class="stars"></div> <!-- Stars background here -->
-    <div class="content">
-      <h1 class="text-4xl font-bold text-white">Welcome to Game Changer!</h1>
-      <p class="mt-4 text-lg text-gray-300">Explore the cosmos!</p>
+
+    <!-- Container to center the image -->
+    <div class="logo-container">
+        <img src="assets/images/logo.png" alt="Game Changer Logo" class="logo-img">
     </div>
   `,
   styleUrls: ['./home.component.css'], // Ensure you have a separate CSS file if needed
   imports: [NavbarComponent] // Declare the Navbar component as a dependency
 })
 export class HomeComponent implements OnInit {
-  private colors = ['#1a202c', '#2d3748', '#4a5568', '#718096', '#edf2f7'];
+  // Spectrum of greens and black shades
+  private colors = [
+    '#0a0f0a', // Dark green-black
+    '#1d2b1d', // Dark forest green
+    '#2e4532', // Medium green
+    '#415b41', // Slightly lighter green
+    '#537d4e', // Lush green
+    '#6c9a60', // Light green
+    '#87b374', // Greenish tint
+    '#a3c08e', // Pale green
+    '#4b4d45'  // Charcoal green-black
+  ];
   private currentIndex = 0;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
@@ -53,6 +65,6 @@ export class HomeComponent implements OnInit {
       this.currentIndex = (this.currentIndex + 1) % this.colors.length;
       body.style.transition = 'background-color 1s ease-in-out'; // Fade effect
       body.style.backgroundColor = this.colors[this.currentIndex];
-    }, 2000); // Change color every 2 seconds
+    }, 10000); // Change color every 2 seconds
   }
 }
