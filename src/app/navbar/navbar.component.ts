@@ -17,11 +17,17 @@ import { RouterModule } from '@angular/router'; // Import RouterModule
         <!-- Navigation links -->
         <ul class="flex justify-center space-x-4">
           <li><a class="hover:text-white-300" routerLink="/home">Home</a></li>
-          <li><a class="hover:text-white-300" routerLink="/coming-soon">Services</a></li>
-          <li><a class="hover:text-white-300" routerLink="/coming-soon">About</a></li>
-          <li><a class="hover:text-white-300" routerLink="/coming-soon">Contact</a></li>
-          <li><a class="hover:text-white-300" routerLink="/games">Games</a></li>
+          <li><a class="hover:text-white-300" routerLink="/late-play-games">Play Later</a></li>
+          <li><a class="hover:text-white-300" routerLink="/now-play-games">Playing Now</a></li>
+          <li><a class="hover:text-white-300" routerLink="/played-games">Played Games</a></li>
+          <li><a class="hover:text-white-300" routerLink="/finished-games">Completed Games</a></li>
         </ul>
+        
+        <!-- User avatar and name -->
+        <div class="user-profile flex items-center space-x-2">
+          <img src="assets/images/avatar.png" alt="User Avatar" class="h-10 w-10 rounded-full">
+          <span class="text-black">User Name</span>
+        </div>
       </div>
     </nav>
   `,
