@@ -112,6 +112,42 @@ export class GameServiceService {
       throw error; // Propagate the error to the component for further handling (e.g., showing an alert)
     }
   }
+
+  // Function to remove a game from a specific list within the user's profile
+async removeGameFromList(gameId: string, listName: string): Promise<void> {
+  try {
+    // Fetch the user's profile
+    const profile = await this.user_service.getUserProfile();
+
+    // Find the specific list within the user's profile
+    const list = profile['lists'].find((list: any) => list['name'] === listName);
+
+    if (!list) {
+      throw new Error(`List '${listName}' not found in profile.`);
+    }
+
+    // Remove the game from the list (check if it's present first)
+    const gameIndex = list['gamesIds'].indexOf(gameId);
+    if (gameIndex > -1) {
+      list['gamesIds'].splice(gameIndex, 1); // Remove the game from the list
+    } else {
+      console.log(`${gameId} is not in the ${listName} list.`);
+      return; // If the game isn't in the list, exit early
+    }
+
+    // Update the profile with the modified list
+    await this.user_service.updateProfile(profile).toPromise();
+    console.log(`${gameId} has been removed from the ${listName} list.`);
+
+    // Optionally navigate to the updated list
+    this.router.navigate([listName]);
+
+  } catch (error) {
+    console.error('Error removing game from list:', error);
+    throw error; // Propagate the error for further handling in the component (e.g., showing an alert)
+  }
+}
+
   
  
   // getGame(id: string): Observable <any> {

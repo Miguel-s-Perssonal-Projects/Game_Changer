@@ -74,9 +74,18 @@ import { MatIconModule } from '@angular/material/icon';
 
           <!-- Add buttons for the different lists -->
           <div class="button-container" style="display: flex; gap: 10px;">
-            <button *ngFor="let list of lists" (click)="addToList(list.name)" class="list-button" style="display: flex; align-items: center;">
-              <mat-icon [fontIcon]="getIconForList(list.name)" style="margin-right: 8px;"></mat-icon> 
-              {{ list.name }}
+            <button *ngFor="let list of lists" 
+                    (click)="toggleList(list)"
+                    [disabled]="isGameInAnyList() && !isCurrentList(list)"
+                    class="list-button"
+                    [ngClass]="{
+                      'active-list': isCurrentList(list),
+                      'inactive-list': isGameInAnyList() && !isCurrentList(list),
+                      'no-list': !isGameInAnyList()
+                    }"
+                    style="display: flex; align-items: center;">
+              <mat-icon [fontIcon]="getIconForList(list.name)" style="margin-right: 8px;"></mat-icon>
+              {{ isCurrentList(list) ? 'Remove from ' : 'Add to ' }}{{ list.name }}
             </button>
           </div>
         </div>
@@ -110,7 +119,7 @@ export class GameDetailComponent implements OnInit {
         this.game = gameData;
 
         // Optionally set a background image based on game data
-        if (this.game) {
+        if (this.game && isPlatformBrowser(this.platformId)) {
           document.body.style.backgroundImage = `url(${this.game.thumbnail})`;
           document.body.style.backgroundSize = 'cover';
           document.body.style.backgroundPosition = 'center';
@@ -132,11 +141,48 @@ export class GameDetailComponent implements OnInit {
     }
   }
 
+  // Check if the game is in any list
+  isGameInAnyList(): boolean {
+    return this.lists.some(list => list.gamesIds && list.gamesIds.includes(this.gameId));
+  }
+
+  // Check if the game is in a specific list
+  isCurrentList(list: any): boolean {
+    return list.gamesIds && list.gamesIds.includes(this.gameId);
+  }
+
+  // Function to handle adding/removing the game from a specific list
+  toggleList(list: any): void {
+    if (this.gameId) {
+      const isInCurrentList = this.isCurrentList(list);
+      if (isInCurrentList) {
+        this.removeFromList(list.name); // Call remove function if game is in the current list
+      } else {
+        this.addToList(list.name); // Call add function if game is not in the list
+      }
+    }
+  }
+
   // Function to handle adding the game to a specific list
   addToList(listName: string): void {
     if (this.gameId) {
       this.gameService.addGameToList(this.gameId, listName);
     }
+  }
+
+  // Function to handle adding the game to a specific list
+  removeFromList(listName: string): void {
+    if (this.gameId) {
+      this.gameService.removeGameFromList(this.gameId, listName);
+    }
+  }
+
+  // Function to check if the game is already in the list
+  isGameInList(list: any): boolean {
+    console.log(list.gamesIds);
+    console.log(this.gameId?.toString());
+    console.log(list.gamesIds.includes(this.gameId?.toString()));
+    return list.gamesIds && list.gamesIds.includes(this.gameId);
   }
 
   // Function to get the correct icon based on the list name

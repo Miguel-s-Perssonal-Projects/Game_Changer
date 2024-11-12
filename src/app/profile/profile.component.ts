@@ -60,7 +60,7 @@ export interface UserList {
           </div> -->
 
           <div class="form-group">
-            <button type="submit" class="submit-btn">Confirm</button>
+            <button type="submit" class="submit-btn">Update</button>
           </div>
         </form>
       </div>
