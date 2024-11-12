@@ -113,7 +113,7 @@ export class GamesComponent implements OnInit {
     }
     try {
       this.games = await this.game_service.getGames();  // Await the Promise to get the games
-      this.filteredGames = this.games; // Initially, display all games
+      this.filteredGames = this.games.filter(game => game.title); // Initially, display all games
     } catch (error) {
       console.error('Error fetching games:', error);  // Handle any errors
     }
@@ -122,7 +122,12 @@ export class GamesComponent implements OnInit {
   onSearch(): void {
     if (this.searchQuery) {
       this.filteredGames = this.games.filter(game => {
-        const title = game.title ? game.title.toLowerCase() : '';
+        // Only filter games that have a valid title
+        if (!game.title) {
+          return false; // Exclude games without a title
+        }
+  
+        const title = game.title.toLowerCase();
         const shortDescription = game.shortDescription ? game.shortDescription.toLowerCase() : '';
         const genre = game.genre ? game.genre.toLowerCase() : '';
         const developer = game.developer ? game.developer.toLowerCase() : '';
@@ -134,9 +139,10 @@ export class GamesComponent implements OnInit {
       });
     } else {
       // If the search input is cleared, show all games
-      this.filteredGames = this.games;
+      this.filteredGames = this.games.filter(game => game.title); // Only include games with a title
     }
   }
+  
   
 
   createStars(count: number) {
