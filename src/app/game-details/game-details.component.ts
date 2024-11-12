@@ -45,30 +45,32 @@ import { MatIconModule } from '@angular/material/icon';
               <label for="description">Description</label>
               <textarea id="description" disabled>{{ game.description }}</textarea>
             </div>
+            <div class="form-group">
+              <label for="freetogameProfileUrl">Link to game</label>
+              <textarea id="freetogameProfileUrl" disabled>{{ game.freetogameProfileUrl }}</textarea>
+            </div>
           </form>
-          <div class="image-container">
-            <img [src]="game.thumbnail" alt="{{ game.title }}" />
-          </div>
 
           <!-- Display screenshots if available -->
-          <div *ngIf="game.screenshots.screenshot_1 || game.screenshots.screenshot_2 || game.screenshots.screenshot_3" class="screenshots">
-            <h2>Screenshots</h2>
+          <div *ngIf="game.screenshots[0].image || game.screenshots[1].image || game.screenshots[2].image" class="screenshots">
+            <h2 class="screenshots-title">Screenshots</h2> <!-- Add custom class -->
             <div class="screenshot-grid">
-              <img *ngIf="game.screenshots.screenshot_1" [src]="game.screenshots.screenshot_1" alt="Screenshot 1" />
-              <img *ngIf="game.screenshots.screenshot_2" [src]="game.screenshots.screenshot_2" alt="Screenshot 2" />
-              <img *ngIf="game.screenshots.screenshot_3" [src]="game.screenshots.screenshot_3" alt="Screenshot 3" />
+              <img *ngIf="game.screenshots[0].image" [src]="game.screenshots[0].image" alt="Screenshot 1" />
+              <img *ngIf="game.screenshots[1].image" [src]="game.screenshots[1].image" alt="Screenshot 2" />
+              <img *ngIf="game.screenshots[2].image" [src]="game.screenshots[2].image" alt="Screenshot 3" />
             </div>
           </div>
 
+
           <!-- Display system requirements if available -->
-          <div *ngIf="game.system_requirements" class="system-requirements">
-            <h2>System Requirements</h2>
+          <div *ngIf="game.minimumSystemRequirements" class="system-requirements">
+            <h2 class="screenshots-title">System Requirements</h2>
             <ul>
-              <li><strong>OS:</strong> {{ game.system_requirements.os }}</li>
-              <li><strong>Processor:</strong> {{ game.system_requirements.processor }}</li>
-              <li><strong>Memory:</strong> {{ game.system_requirements.memory }}</li>
-              <li><strong>Graphics:</strong> {{ game.system_requirements.graphics }}</li>
-              <li><strong>Storage:</strong> {{ game.system_requirements.storage }}</li>
+              <li class="screenshots-title"><strong>OS:</strong> {{ game.minimumSystemRequirements.os }}</li>
+              <li class="screenshots-title"><strong>Processor:</strong> {{ game.minimumSystemRequirements.processor }}</li>
+              <li class="screenshots-title"><strong>Memory:</strong> {{ game.minimumSystemRequirements.memory }}</li>
+              <li class="screenshots-title"><strong>Graphics:</strong> {{ game.minimumSystemRequirements.graphics }}</li>
+              <li class="screenshots-title"><strong>Storage:</strong> {{ game.minimumSystemRequirements.storage }}</li>
             </ul>
           </div>
 
@@ -117,6 +119,7 @@ export class GameDetailComponent implements OnInit {
       // Fetch game details using the id from the URL
       this.gameService.getGameDetailsById(this.gameId.toString()).subscribe((gameData) => {
         this.game = gameData;
+        console.log(this.game?.screenshots[0]);
 
         // Optionally set a background image based on game data
         if (this.game && isPlatformBrowser(this.platformId)) {

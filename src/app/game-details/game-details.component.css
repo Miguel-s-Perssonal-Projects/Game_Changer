@@ -185,6 +185,10 @@ img {
     background-color: green; /* Green background for all buttons when not in any list */
     cursor: pointer;
   }
+
+  .screenshots-title {
+    color: white;  /* Set text color to white */
+  }
   
   
   

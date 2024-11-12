@@ -24,11 +24,11 @@ export interface Game {
   developer: string,
   releaseDate: string,
   freetogameProfileUrl: string,
-  system_requirements: SystemRequirements,
-  screenshots: Screenshots
+  minimumSystemRequirements: SystemRequirements,
+  screenshots: Screenshot[]
 }
 
-interface SystemRequirements {
+export interface SystemRequirements {
   os: string,
   processor: string,
   memory: string,
@@ -36,10 +36,9 @@ interface SystemRequirements {
   storage: string
 }
 
-interface Screenshots {
-  screenshot_1: string,
-  screenshot_2: string,
-  screenshot_3: string,
+export interface Screenshot {
+  id: string,
+  image: string
 }
 
 @Component({
