@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common'; // Import CommonModule
 import { isPlatformBrowser } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component'; // Assuming Navbar component is used
 import { Game } from '../games/games.component';
+import { ActivatedRoute } from '@angular/router';
+import { GameServiceService } from '../../app/services/game_services/game-service.service';
 
 @Component({
   selector: 'app-game-details',
@@ -45,12 +47,12 @@ import { Game } from '../games/games.component';
         </div>
 
         <!-- Display screenshots if available -->
-        <div *ngIf="game.screenshot_1 || game.screenshot_2 || game.screenshot_3" class="screenshots">
+        <div *ngIf="game.screenshots.screenshot_1 || game.screenshots.screenshot_2 || game.screenshots.screenshot_3" class="screenshots">
           <h2>Screenshots</h2>
           <div class="screenshot-grid">
-            <img *ngIf="game.screenshot_1" [src]="game.screenshot_1" alt="Screenshot 1" />
-            <img *ngIf="game.screenshot_2" [src]="game.screenshot_2" alt="Screenshot 2" />
-            <img *ngIf="game.screenshot_3" [src]="game.screenshot_3" alt="Screenshot 3" />
+            <img *ngIf="game.screenshots.screenshot_1" [src]="game.screenshots.screenshot_1" alt="Screenshot 1" />
+            <img *ngIf="game.screenshots.screenshot_2" [src]="game.screenshots.screenshot_2" alt="Screenshot 2" />
+            <img *ngIf="game.screenshots.screenshot_3" [src]="game.screenshots.screenshot_3" alt="Screenshot 3" />
           </div>
         </div>
 
@@ -77,23 +79,31 @@ export class GameDetailComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
+    private gameService: GameServiceService,
     @Inject(PLATFORM_ID) private platformId: Object // Inject PLATFORM_ID to check platform type
   ) {}
 
   ngOnInit() {
-    // Only access history.state in the browser
-    if (isPlatformBrowser(this.platformId)) {
-      const state = history.state;
+    // Get the 'id' parameter from the URL
+    const gameId = this.route.snapshot.paramMap.get('id');  // 'id' is the route parameter key
 
-      if (state && state.title) { // Check for Game properties instead of constellation properties
-        this.game = state as Game;
-        // Optionally set a background image based on game data if desired
-        document.body.style.backgroundImage = `url(${this.game.thumbnail})`;
-        document.body.style.backgroundSize = 'cover';
-        document.body.style.backgroundPosition = 'center';
-      } else {
-        console.error('No game data found!');
-      }
+    if (gameId) {
+      // Fetch game details using the id from the URL
+      this.gameService.getGameDetailsById(gameId.toString()).subscribe((gameData) => {
+        this.game = gameData;
+
+        // Optionally set a background image based on game data
+        if (this.game) {
+          document.body.style.backgroundImage = `url(${this.game.thumbnail})`;
+          document.body.style.backgroundSize = 'cover';
+          document.body.style.backgroundPosition = 'center';
+        }
+      }, (error) => {
+        console.error('Error fetching game details:', error);
+      });
+    } else {
+      console.error('No game ID found in the URL');
     }
   }
 }

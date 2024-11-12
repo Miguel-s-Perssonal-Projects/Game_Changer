@@ -88,6 +88,7 @@ export class ProfileComponent implements OnInit {
       email: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required]),
       avatar: new FormControl('', [Validators.required]),
+      lists: new FormControl([], [Validators.required])
     });
 
   // Spectrum of greens and black shades
@@ -114,7 +115,6 @@ export class ProfileComponent implements OnInit {
 
     try {
       this.userProfile = await this.user_service.getUserProfile();  // Await the Promise to get the games
-      console.log(this.userProfile);  // Log after the data is available
     } catch (error) {
       console.error('Error fetching games:', error);  // Handle any errors
     }
@@ -124,6 +124,7 @@ export class ProfileComponent implements OnInit {
     this.myForm.controls['email'].setValue(this.userProfile.email);
     this.myForm.controls['password'].setValue(this.userProfile.password);
     this.myForm.controls['avatar'].setValue(this.userProfile.avatar);
+    this.myForm.controls['lists'].setValue(this.userProfile.lists);
   }
 
   // Handle file input change to display the preview
@@ -174,13 +175,10 @@ export class ProfileComponent implements OnInit {
 
   // Method to handle form submission
   onSubmit() {
-    console.log('estou aqui');
     if (!this.myForm.invalid) {
-        console.log(this.myForm.getRawValue());
 
         this.user_service.updateAnimal(this.myForm.getRawValue()).subscribe({
             next: (data) => {
-                console.log(data);
                 this.router.navigate(['/home']);
             },
             error: (error) => {

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';  // Add HttpClientModule here
 import { CommonModule } from '@angular/common';
 import { GameCardComponent } from '../game-card/game-card.component';
+import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { NavbarComponent } from '../navbar/navbar.component';
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
@@ -23,10 +24,8 @@ export interface Game {
   developer: string,
   releaseDate: string,
   freetogameProfileUrl: string,
-  screenshot_1: string,
-  screenshot_2: string,
-  screenshot_3: string,
-  system_requirements: SystemRequirements
+  system_requirements: SystemRequirements,
+  screenshots: Screenshots
 }
 
 interface SystemRequirements {
@@ -37,6 +36,12 @@ interface SystemRequirements {
   storage: string
 }
 
+interface Screenshots {
+  screenshot_1: string,
+  screenshot_2: string,
+  screenshot_3: string,
+}
+
 @Component({
   selector: 'app-games',
   standalone: true,
@@ -45,9 +50,19 @@ interface SystemRequirements {
     <div class="stars"></div> <!-- Stars background here -->
     <div class="content">
       <h1 class="text-3xl font-bold text-white text-center">Games</h1>
+      <!-- Search Bar -->
+      <div class="search-container">
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery" 
+          placeholder="Search games..." 
+          class="search-input" 
+          (input)="onSearch()"
+        />
+      </div>
       <div class="cards grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <app-game-card 
-          *ngFor="let game of games" 
+          *ngFor="let game of filteredGames" 
           [title]="game.title" 
           [thumbnail]="game.thumbnail"
           [shortDescription]="game.shortDescription"
@@ -60,12 +75,15 @@ interface SystemRequirements {
   imports: [
     CommonModule, 
     HttpClientModule, 
-    GameCardComponent, 
+    GameCardComponent,
+    FormsModule,
     NavbarComponent
   ],
 })
 export class GamesComponent implements OnInit {
   games: Game[] = [];
+  filteredGames: Game[] = [];
+  searchQuery: string = ''; // Holds the search query input by the user
 
   // Spectrum of greens and black shades
   private colors = [
@@ -95,11 +113,31 @@ export class GamesComponent implements OnInit {
     }
     try {
       this.games = await this.game_service.getGames();  // Await the Promise to get the games
-      console.log(this.games);  // Log after the data is available
+      this.filteredGames = this.games; // Initially, display all games
     } catch (error) {
       console.error('Error fetching games:', error);  // Handle any errors
     }
   }
+
+  onSearch(): void {
+    if (this.searchQuery) {
+      this.filteredGames = this.games.filter(game => {
+        const title = game.title ? game.title.toLowerCase() : '';
+        const shortDescription = game.shortDescription ? game.shortDescription.toLowerCase() : '';
+        const genre = game.genre ? game.genre.toLowerCase() : '';
+        const developer = game.developer ? game.developer.toLowerCase() : '';
+  
+        return title.includes(this.searchQuery.toLowerCase()) || 
+               shortDescription.includes(this.searchQuery.toLowerCase()) || 
+               genre.includes(this.searchQuery.toLowerCase()) ||
+               developer.includes(this.searchQuery.toLowerCase()); // Add more fields as needed
+      });
+    } else {
+      // If the search input is cleared, show all games
+      this.filteredGames = this.games;
+    }
+  }
+  
 
   createStars(count: number) {
     const starsContainer = document.querySelector('.stars') as HTMLElement; // Type assertion
