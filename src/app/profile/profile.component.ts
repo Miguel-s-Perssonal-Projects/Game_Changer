@@ -177,7 +177,7 @@ export class ProfileComponent implements OnInit {
   onSubmit() {
     if (!this.myForm.invalid) {
 
-        this.user_service.updateAnimal(this.myForm.getRawValue()).subscribe({
+        this.user_service.updateProfile(this.myForm.getRawValue()).subscribe({
             next: (data) => {
                 this.router.navigate(['/home']);
             },

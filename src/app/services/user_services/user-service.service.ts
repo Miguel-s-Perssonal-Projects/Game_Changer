@@ -27,7 +27,7 @@ export class UserServiceService {
   }
 
   // Method to update user profile (if needed, e.g., for updating name or email)
-  updateAnimal(updateProfile: UserProfile) {
+  updateProfile(updateProfile: UserProfile) {
     return this.http.put('http://localhost:3000/profile', updateProfile)
   }
 }

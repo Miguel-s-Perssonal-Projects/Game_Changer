@@ -6,91 +6,107 @@ import { NavbarComponent } from '../navbar/navbar.component'; // Assuming Navbar
 import { Game } from '../games/games.component';
 import { ActivatedRoute } from '@angular/router';
 import { GameServiceService } from '../../app/services/game_services/game-service.service';
+import { UserList } from '../profile/profile.component';
+import { UserServiceService } from '../services/user_services/user-service.service';
+import { MatIconModule } from '@angular/material/icon';
+
 
 @Component({
   selector: 'app-game-details',
   template: `
-    <app-navbar></app-navbar>
-    <div class="game-background"></div> <!-- Optional background customization -->
-    <div class="content">
-      <div *ngIf="game" class="form-container">
-        <h1 class="title">{{ game.title }}</h1>
-        
-        <form class="game-form">
-          <div class="form-group">
-            <label for="genre">Genre</label>
-            <input id="genre" type="text" value="{{ game.genre }}" disabled>
+      <app-navbar></app-navbar>
+      <div class="game-background"></div> <!-- Optional background customization -->
+      <div class="content">
+        <div *ngIf="game" class="form-container">
+          <h1 class="title">{{ game.title }}</h1>
+          
+          <form class="game-form">
+            <div class="form-group">
+              <label for="genre">Genre</label>
+              <input id="genre" type="text" value="{{ game.genre }}" disabled>
+            </div>
+            <div class="form-group">
+              <label for="platform">Platform</label>
+              <input id="platform" type="text" value="{{ game.platform }}" disabled>
+            </div>
+            <div class="form-group">
+              <label for="publisher">Publisher</label>
+              <input id="publisher" type="text" value="{{ game.publisher }}" disabled>
+            </div>
+            <div class="form-group">
+              <label for="developer">Developer</label>
+              <input id="developer" type="text" value="{{ game.developer }}" disabled>
+            </div>
+            <div class="form-group">
+              <label for="releaseDate">Release Date</label>
+              <input id="releaseDate" type="text" value="{{ game.releaseDate }}" disabled>
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea id="description" disabled>{{ game.description }}</textarea>
+            </div>
+          </form>
+          <div class="image-container">
+            <img [src]="game.thumbnail" alt="{{ game.title }}" />
           </div>
-          <div class="form-group">
-            <label for="platform">Platform</label>
-            <input id="platform" type="text" value="{{ game.platform }}" disabled>
-          </div>
-          <div class="form-group">
-            <label for="publisher">Publisher</label>
-            <input id="publisher" type="text" value="{{ game.publisher }}" disabled>
-          </div>
-          <div class="form-group">
-            <label for="developer">Developer</label>
-            <input id="developer" type="text" value="{{ game.developer }}" disabled>
-          </div>
-          <div class="form-group">
-            <label for="releaseDate">Release Date</label>
-            <input id="releaseDate" type="text" value="{{ game.releaseDate }}" disabled>
-          </div>
-          <div class="form-group">
-            <label for="description">Description</label>
-            <textarea id="description" disabled>{{ game.description }}</textarea>
-          </div>
-        </form>
-        <div class="image-container">
-          <img [src]="game.thumbnail" alt="{{ game.title }}" />
-        </div>
 
-        <!-- Display screenshots if available -->
-        <div *ngIf="game.screenshots.screenshot_1 || game.screenshots.screenshot_2 || game.screenshots.screenshot_3" class="screenshots">
-          <h2>Screenshots</h2>
-          <div class="screenshot-grid">
-            <img *ngIf="game.screenshots.screenshot_1" [src]="game.screenshots.screenshot_1" alt="Screenshot 1" />
-            <img *ngIf="game.screenshots.screenshot_2" [src]="game.screenshots.screenshot_2" alt="Screenshot 2" />
-            <img *ngIf="game.screenshots.screenshot_3" [src]="game.screenshots.screenshot_3" alt="Screenshot 3" />
+          <!-- Display screenshots if available -->
+          <div *ngIf="game.screenshots.screenshot_1 || game.screenshots.screenshot_2 || game.screenshots.screenshot_3" class="screenshots">
+            <h2>Screenshots</h2>
+            <div class="screenshot-grid">
+              <img *ngIf="game.screenshots.screenshot_1" [src]="game.screenshots.screenshot_1" alt="Screenshot 1" />
+              <img *ngIf="game.screenshots.screenshot_2" [src]="game.screenshots.screenshot_2" alt="Screenshot 2" />
+              <img *ngIf="game.screenshots.screenshot_3" [src]="game.screenshots.screenshot_3" alt="Screenshot 3" />
+            </div>
           </div>
-        </div>
 
-        <!-- Display system requirements if available -->
-        <div *ngIf="game.system_requirements" class="system-requirements">
-          <h2>System Requirements</h2>
-          <ul>
-            <li><strong>OS:</strong> {{ game.system_requirements.os }}</li>
-            <li><strong>Processor:</strong> {{ game.system_requirements.processor }}</li>
-            <li><strong>Memory:</strong> {{ game.system_requirements.memory }}</li>
-            <li><strong>Graphics:</strong> {{ game.system_requirements.graphics }}</li>
-            <li><strong>Storage:</strong> {{ game.system_requirements.storage }}</li>
-          </ul>
+          <!-- Display system requirements if available -->
+          <div *ngIf="game.system_requirements" class="system-requirements">
+            <h2>System Requirements</h2>
+            <ul>
+              <li><strong>OS:</strong> {{ game.system_requirements.os }}</li>
+              <li><strong>Processor:</strong> {{ game.system_requirements.processor }}</li>
+              <li><strong>Memory:</strong> {{ game.system_requirements.memory }}</li>
+              <li><strong>Graphics:</strong> {{ game.system_requirements.graphics }}</li>
+              <li><strong>Storage:</strong> {{ game.system_requirements.storage }}</li>
+            </ul>
+          </div>
+
+          <!-- Add buttons for the different lists -->
+          <div class="button-container" style="display: flex; gap: 10px;">
+            <button *ngFor="let list of lists" (click)="addToList(list.name)" class="list-button" style="display: flex; align-items: center;">
+              <mat-icon [fontIcon]="getIconForList(list.name)" style="margin-right: 8px;"></mat-icon> 
+              {{ list.name }}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+
   `,
   styleUrls: ['./game-details.component.css'],
   standalone: true,
-  imports: [CommonModule, NavbarComponent] // Import CommonModule to use ngIf
+  imports: [CommonModule, NavbarComponent, MatIconModule,] // Import CommonModule to use ngIf
 })
 export class GameDetailComponent implements OnInit {
   game: Game | null = null;
+  lists: any[] = [];
+  gameId: string | null = null;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private gameService: GameServiceService,
+    private userService: UserServiceService,
     @Inject(PLATFORM_ID) private platformId: Object // Inject PLATFORM_ID to check platform type
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     // Get the 'id' parameter from the URL
-    const gameId = this.route.snapshot.paramMap.get('id');  // 'id' is the route parameter key
+    this.gameId = this.route.snapshot.paramMap.get('id');  // 'id' is the route parameter key
 
-    if (gameId) {
+    if (this.gameId) {
       // Fetch game details using the id from the URL
-      this.gameService.getGameDetailsById(gameId.toString()).subscribe((gameData) => {
+      this.gameService.getGameDetailsById(this.gameId.toString()).subscribe((gameData) => {
         this.game = gameData;
 
         // Optionally set a background image based on game data
@@ -99,11 +115,43 @@ export class GameDetailComponent implements OnInit {
           document.body.style.backgroundSize = 'cover';
           document.body.style.backgroundPosition = 'center';
         }
+
+
       }, (error) => {
         console.error('Error fetching game details:', error);
       });
+
+      const profile = await this.userService.getUserProfile();
+      this.lists = profile['lists'];
+
+      console.log(this.lists);
+
+      
     } else {
       console.error('No game ID found in the URL');
+    }
+  }
+
+  // Function to handle adding the game to a specific list
+  addToList(listName: string): void {
+    if (this.gameId) {
+      this.gameService.addGameToList(this.gameId, listName);
+    }
+  }
+
+  // Function to get the correct icon based on the list name
+  getIconForList(listName: string): string {
+    switch (listName) {
+      case 'Play Later':
+        return 'timer'; // Use a clock icon for "Play Later"
+      case 'Currently Playing':
+        return 'play_arrow'; // Use a play icon for "Currently Playing"
+      case 'Played':
+        return 'check_circle'; // Use a check circle for "Played"
+      case 'Completed':
+        return 'done_all'; // Use a "done all" icon for "Completed"
+      default:
+        return 'list'; // Default list icon
     }
   }
 }

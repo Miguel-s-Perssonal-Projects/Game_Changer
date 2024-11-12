@@ -25,10 +25,10 @@ import { UserProfile } from '../profile/profile.component';
           <li class="relative">
             <a class="hover:text-white-300" href="#">Play Games</a>
             <ul class="dropdown absolute hidden bg-black text-white rounded-lg shadow-md">
-              <li><a class="hover:text-white-300" routerLink="/late-play-games">Play Later</a></li>
-              <li><a class="hover:text-white-300" routerLink="/now-play-games">Playing Now</a></li>
-              <li><a class="hover:text-white-300" routerLink="/played-games">Played Games</a></li>
-              <li><a class="hover:text-white-300" routerLink="/finished-games">Completed Games</a></li>
+              <li><a class="hover:text-white-300" routerLink="/Play Later">Play Later</a></li>
+              <li><a class="hover:text-white-300" routerLink="/Currently Playing">Playing Now</a></li>
+              <li><a class="hover:text-white-300" routerLink="/Played">Played Games</a></li>
+              <li><a class="hover:text-white-300" routerLink="/Completed">Completed Games</a></li>
             </ul>
           </li>
 
@@ -64,7 +64,6 @@ export class NavbarComponent implements OnInit {
   async ngOnInit() {
     try {
       this.userProfile = await this.user_service.getUserProfile();  // Await the Promise to get the games
-      console.log(this.userProfile);  // Log after the data is available
     } catch (error) {
       console.error('Error fetching games:', error);  // Handle any errors
     }

@@ -148,3 +148,32 @@ img {
 .system-requirements li {
     margin-bottom: 8px;
 }
+
+
+.button-container {
+    display: flex;
+    justify-content: space-around; /* Distribute space evenly between buttons */
+    margin-top: 20px; /* Add some margin above the buttons */
+  }
+  
+  .list-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .list-button i {
+    margin-right: 8px;
+  }
+  
+  .list-button:hover {
+    background-color: #45a049;
+  }
+  

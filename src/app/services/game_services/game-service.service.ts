@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { count, map, Observable } from 'rxjs';
-import { Game } from '../../games/games.component'
+import { Game } from '../../games/games.component';
+import { UserServiceService } from '../user_services/user-service.service';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -13,7 +15,7 @@ export class GameServiceService {
   private gamesUrl = 'http://localhost:3000/gamesList'; // URL to fetch all games
   private gamesDetailsUrl = 'http://localhost:3000/gameDetails'; // URL to fetch all games
 
-  constructor(private http: HttpClient) { }
+  constructor(private router: Router,private http: HttpClient, private user_service: UserServiceService) { }
 
   getGamesHttp(): Observable<any> {
     return this.http.get("http://localhost:3000/gamesList");
@@ -22,20 +24,6 @@ export class GameServiceService {
   async getGames(): Promise<any> {
     try {
       const data = await this.getGamesHttp().toPromise();  // Convert Observable to Promise
-      return data;
-    } catch (error) {
-      console.error('Algo correu mal: ', error);
-      throw error;  // Propagate error if necessary
-    }
-  }
-
-  getProfileHttp(): Observable<any> {
-    return this.http.get("http://localhost:3000/profile");
-  }
-
-  async getUserProfile(): Promise<any> {
-    try {
-      const data = await this.getProfileHttp().toPromise();  // Convert Observable to Promise
       return data;
     } catch (error) {
       console.error('Algo correu mal: ', error);
@@ -77,7 +65,7 @@ export class GameServiceService {
   // Function to fetch games based on a specific list (like 'Play Later', 'Now Playing', etc.)
   async getGamesForList(listName: string): Promise<any> {
     try {
-      const profile = await this.getUserProfile();
+      const profile = await this.user_service.getUserProfile();
       //console.log(profile['lists']);
       const list = profile['lists'].find((list: any) => list['name'] === listName);
       //console.log(list['gamesIds']);
@@ -92,6 +80,36 @@ export class GameServiceService {
     } catch (error) {
       console.error('Error fetching games for the list:', error);
       this.games = [];  // Reset games in case of error
+    }
+  }
+
+  // Function to add a game to a specific list within the user's profile
+  async addGameToList(gameId: string, listName: string): Promise<void> {
+    try {
+      // Fetch the user's profile
+      const profile = await this.user_service.getUserProfile();
+
+      // Find the specific list within the user's profile
+      const list = profile['lists'].find((list: any) => list['name'] === listName);
+
+      if (!list) {
+        throw new Error(`List '${listName}' not found in profile.`);
+      }
+
+      // Add the game to the found list (check if it's already there to avoid duplicates)
+      if (!list['gamesIds'].includes(gameId)) {
+        list['gamesIds'].push(gameId);
+      }
+
+      // Update the profile with the modified list
+      await this.user_service.updateProfile(profile).toPromise();
+      console.log(`${gameId} has been added to the ${listName} list.`);
+
+      this.router.navigate([listName]);
+
+    } catch (error) {
+      console.error('Error adding game to list:', error);
+      throw error; // Propagate the error to the component for further handling (e.g., showing an alert)
     }
   }
   
