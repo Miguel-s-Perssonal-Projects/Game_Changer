@@ -1,0 +1,117 @@
+/* Overall container styling */
+.games-container {
+    background-color: #1a1a1a; /* Dark background */
+    padding: 20px;
+    min-height: 100vh; /* Full height */
+  }
+  
+  /* Heading styles */
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  /* Cards container */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid */
+    gap: 15px; /* Space between cards */
+  }
+  
+  /* Individual card styles */
+  .card {
+    background-color: #2c2c2c; /* Card background */
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; /* Clip the image overflow */
+    transition: transform 0.3s; /* Animation on hover */
+    text-align: center; /* Center text */
+  }
+  
+  .card:hover {
+    transform: scale(1.05); /* Scale effect on hover */
+  }
+  
+  /* Image styling */
+  .card img {
+    width: 100%; /* Responsive image */
+    height: auto; /* Maintain aspect ratio */
+  }
+  
+  /* Title styles */
+  .card h2 {
+    color: #f0f0f0; /* Light text color */
+    padding: 10px 0;
+    font-size: 1.2em; /* Adjust font size */
+  }
+
+  .stars {
+    position: fixed;  /* Fixed position to cover the entire viewport */
+    top: 0;
+    left: 0;
+    width: 100vw;      /* Full width of the viewport */
+    height: 100vh;     /* Full height of the viewport */
+    z-index: -1;       /* Ensure it stays behind the content */
+    pointer-events: none; /* Prevent interaction with UI elements */
+    background-color: #0a0f0a; /* Initial color, change as needed */
+    transition: background-color 1s ease-in-out; /* Smooth transition for color change */
+  }
+
+        /* Add to games.component.css */
+.search-container {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    margin: 20px 0; /* Optional: Adds margin for spacing */
+  }
+  
+  .search-input {
+    padding: 10px;
+    width: 100%;
+    max-width: 400px; /* Set a max-width for responsive design */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .search-button {
+    padding: 10px 15px;
+    margin-left: 10px; /* Space between input and button */
+    background-color: #007bff; /* Blue color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .search-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+
+
+  /* Filter container for dropdowns */
+  .filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 20px;
+    color: #ffffff; /* White text to match the theme */
+  }
+  
+  /* Dropdown styles */
+  .filter-container select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #2c2c2c; /* Matches the card background */
+    color: #ffffff; /* Light text for better contrast */
+    outline: none;
+    transition: border 0.3s ease;
+  }
+  
+  /* Hover and focus states for dropdowns */
+  .filter-container select:hover,
+  .filter-container select:focus {
+    border-color: #76c7c0; /* Highlight color for focus and hover states */
+  }
+  
+  
+
+  

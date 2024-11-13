@@ -148,3 +148,48 @@ img {
 .system-requirements li {
     margin-bottom: 8px;
 }
+
+
+.button-container {
+    display: flex;
+    justify-content: space-around; /* Distribute space evenly between buttons */
+    margin-top: 20px; /* Add some margin above the buttons */
+  }
+  
+  /* game-details.component.css */
+.list-button.in-list {
+    background-color: red;
+    color: white;
+    cursor: not-allowed; /* Change cursor to indicate disabled state */
+  }
+  
+/* game-details.component.css */
+.list-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  
+  .list-button.active-list {
+    background-color: green; /* Green background for the active list */
+  }
+  
+  .list-button.inactive-list {
+    background-color: red; /* Red background for other lists when a game is in a list */
+    cursor: not-allowed;
+  }
+  
+  .list-button.no-list {
+    background-color: green; /* Green background for all buttons when not in any list */
+    cursor: pointer;
+  }
+
+  .screenshots-title {
+    color: white;  /* Set text color to white */
+  }
+  
+  
+  
+  
