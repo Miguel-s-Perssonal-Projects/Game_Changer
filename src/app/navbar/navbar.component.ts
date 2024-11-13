@@ -23,7 +23,7 @@ import { UserProfile } from '../profile/profile.component';
           
           <!-- Dropdown for the Play Later section -->
           <li class="relative">
-            <a class="hover:text-white-300" href="#">Play Games</a>
+            <a class="hover:text-white-300" routerLink="/games">Play Games</a>
             <ul class="dropdown absolute hidden bg-black text-white rounded-lg shadow-md">
               <li><a class="hover:text-white-300" routerLink="/Play Later">Play Later</a></li>
               <li><a class="hover:text-white-300" routerLink="/Currently Playing">Playing Now</a></li>
