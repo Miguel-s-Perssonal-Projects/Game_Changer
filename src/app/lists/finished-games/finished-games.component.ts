@@ -9,6 +9,8 @@ import { NavbarComponent } from '../../navbar/navbar.component';
 import { Game } from '../../games/games.component';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { GameServiceService } from '../../services/game_services/game-service.service';
+import { Genre } from '../../games/games.component';
+import { Platform } from '../../games/games.component';
 
 
 @Component({
@@ -16,10 +18,10 @@ import { GameServiceService } from '../../services/game_services/game-service.se
   standalone: true,
   template: `
   <app-navbar></app-navbar>
-  <div class="stars"></div> <!-- Stars background here -->
-  <div class="content">
-    <h1 class="text-3xl font-bold text-white text-center">Games</h1>
-    <!-- Search Bar -->
+    <div class="stars"></div> <!-- Stars background here -->
+    <div class="content">
+      <h1 class="text-3xl font-bold text-white text-center">Games</h1>
+      <!-- Search Bar -->
       <div class="search-container">
         <input 
           type="text" 
@@ -29,16 +31,34 @@ import { GameServiceService } from '../../services/game_services/game-service.se
           (input)="onSearch()"
         />
       </div>
-    <div class="cards grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <app-game-card 
-        *ngFor="let game of filteredGames" 
-        [title]="game.title" 
-        [thumbnail]="game.thumbnail"
-        [shortDescription]="game.shortDescription"
-        (click)="onCardClick(game)">
-      </app-game-card>
+      <!-- Genre and Platform Filters -->
+      <div class="filter-container">
+        <!-- Genre Dropdown -->
+        <label for="genreFilter">Genre:</label>
+        <select id="genreFilter" [(ngModel)]="selectedGenre" (change)="onFilterChange()">
+          <option value="">All</option> <!-- Option to clear the filter -->
+          <option *ngFor="let genre of genres" [value]="genre.name">{{ genre.name }}</option>
+        </select>
+
+        <!-- Platform Dropdown -->
+        <label for="platformFilter">Platform:</label>
+        <select id="platformFilter" [(ngModel)]="selectedPlatform" (change)="onFilterChange()">
+          <option value="">All</option> <!-- Option to clear the filter -->
+          <option *ngFor="let platform of platforms" [value]="platform.name">{{ platform.name }}</option>
+        </select>
+      </div>
+      
+      <!-- Game Cards Display -->
+      <div class="cards grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <app-game-card 
+          *ngFor="let game of filteredGames" 
+          [title]="game.title" 
+          [thumbnail]="game.thumbnail"
+          [shortDescription]="game.shortDescription"
+          (click)="onCardClick(game)">
+        </app-game-card>
+      </div>
     </div>
-  </div>
 `,
 styleUrls: ['./finished-games.component.css'],
 imports: [
@@ -53,6 +73,10 @@ export class FinishedGamesComponent implements OnInit {
   games: Game[] = [];
   filteredGames: Game[] = [];
   searchQuery: string = ''; // Holds the search query input by the user
+  genres: Genre[] = [];
+  platforms: Platform[] = [];
+  selectedGenre: string = '';
+  selectedPlatform: string = '';
 
   // Spectrum of greens and black shades
   private colors = [
@@ -84,28 +108,44 @@ export class FinishedGamesComponent implements OnInit {
     try {
       this.games = await this.game_service.getGamesForList('Completed');  // Await the Promise to get the games
       this.filteredGames = this.games;
+      // Fetch genres and platforms
+      this.fetchGenres();
+      this.fetchPlatforms();
     } catch (error) {
       console.error('Error fetching games:', error);  // Handle any errors
     }
   }
 
+  fetchGenres(): void {
+    this.game_service.getAllGamesGenres().subscribe(
+      (genres: any[]) => this.genres = genres,
+      error => console.error('Error fetching genres:', error)
+    );
+  }
+
+  fetchPlatforms(): void {
+    this.game_service.getAllGamesPlatforms().subscribe(
+      (platforms: any[]) => this.platforms = platforms,
+      error => console.error('Error fetching platforms:', error)
+    );
+  }
+
   onSearch(): void {
-    if (this.searchQuery) {
-      this.filteredGames = this.games.filter(game => {
-        const title = game.title ? game.title.toLowerCase() : '';
-        const shortDescription = game.shortDescription ? game.shortDescription.toLowerCase() : '';
-        const genre = game.genre ? game.genre.toLowerCase() : '';
-        const developer = game.developer ? game.developer.toLowerCase() : '';
-  
-        return title.includes(this.searchQuery.toLowerCase()) || 
-               shortDescription.includes(this.searchQuery.toLowerCase()) || 
-               genre.includes(this.searchQuery.toLowerCase()) ||
-               developer.includes(this.searchQuery.toLowerCase()); // Add more fields as needed
-      });
-    } else {
-      // If the search input is cleared, show all games
-      this.filteredGames = this.games;
-    }
+    this.filterGames();
+  }
+
+  onFilterChange(): void {
+    this.filterGames();
+  }
+
+  filterGames(): void {
+    this.filteredGames = this.games.filter(game => {
+      const matchesTitle = this.searchQuery ? game.title?.toLowerCase().includes(this.searchQuery.toLowerCase()) : true;
+      const matchesGenre = this.selectedGenre ? game.genre === this.selectedGenre : true;
+      const matchesPlatform = this.selectedPlatform ? game.platform === this.selectedPlatform : true;
+
+      return matchesTitle && matchesGenre && matchesPlatform;
+    });
   }
 
   createStars(count: number) {

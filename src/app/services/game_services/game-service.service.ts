@@ -14,6 +14,8 @@ export class GameServiceService {
 
   private gamesUrl = 'http://localhost:3000/gamesList'; // URL to fetch all games
   private gamesDetailsUrl = 'http://localhost:3000/gameDetails'; // URL to fetch all games
+  private gamesGenresUrl = 'http://localhost:3000/genres'; // URL to fetch all games
+  private gamesPlatformsUrl = 'http://localhost:3000/platforms'; // URL to fetch all games
 
   constructor(private router: Router,private http: HttpClient, private user_service: UserServiceService) { }
 
@@ -34,6 +36,16 @@ export class GameServiceService {
   // Fetch all games from the backend
   getAllGames(): Observable<any[]> {
     return this.http.get<any[]>(this.gamesUrl); // Assuming this endpoint returns an array of games
+  }
+
+  // Fetch all games from the backend
+  getAllGamesGenres(): Observable<any[]> {
+    return this.http.get<any[]>(this.gamesGenresUrl); // Assuming this endpoint returns an array of games
+  }
+
+  // Fetch all games from the backend
+  getAllGamesPlatforms(): Observable<any[]> {
+    return this.http.get<any[]>(this.gamesPlatformsUrl); // Assuming this endpoint returns an array of games
   }
 
   // Fetch all games from the backend

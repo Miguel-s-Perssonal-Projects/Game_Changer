@@ -27,7 +27,7 @@ export interface Game {
   minimumSystemRequirements: SystemRequirements,
   screenshots: Screenshot[]
 }
-
+ 
 export interface SystemRequirements {
   os: string,
   processor: string,
@@ -39,6 +39,16 @@ export interface SystemRequirements {
 export interface Screenshot {
   id: string,
   image: string
+}
+
+export interface Platform {
+  id: string,
+  name: string
+}
+
+export interface Genre {
+  id: string,
+  name: string
 }
 
 @Component({
@@ -59,6 +69,24 @@ export interface Screenshot {
           (input)="onSearch()"
         />
       </div>
+      <!-- Genre and Platform Filters -->
+      <div class="filter-container">
+        <!-- Genre Dropdown -->
+        <label for="genreFilter">Genre:</label>
+        <select id="genreFilter" [(ngModel)]="selectedGenre" (change)="onFilterChange()">
+          <option value="">All</option> <!-- Option to clear the filter -->
+          <option *ngFor="let genre of genres" [value]="genre.name">{{ genre.name }}</option>
+        </select>
+
+        <!-- Platform Dropdown -->
+        <label for="platformFilter">Platform:</label>
+        <select id="platformFilter" [(ngModel)]="selectedPlatform" (change)="onFilterChange()">
+          <option value="">All</option> <!-- Option to clear the filter -->
+          <option *ngFor="let platform of platforms" [value]="platform.name">{{ platform.name }}</option>
+        </select>
+      </div>
+      
+      <!-- Game Cards Display -->
       <div class="cards grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <app-game-card 
           *ngFor="let game of filteredGames" 
@@ -83,6 +111,10 @@ export class GamesComponent implements OnInit {
   games: Game[] = [];
   filteredGames: Game[] = [];
   searchQuery: string = ''; // Holds the search query input by the user
+  genres: Genre[] = [];
+  platforms: Platform[] = [];
+  selectedGenre: string = '';
+  selectedPlatform: string = '';
 
   // Spectrum of greens and black shades
   private colors = [
@@ -113,34 +145,69 @@ export class GamesComponent implements OnInit {
     try {
       this.games = await this.game_service.getGames();  // Await the Promise to get the games
       this.filteredGames = this.games.filter(game => game.title); // Initially, display all games
+      // Fetch genres and platforms
+      this.fetchGenres();
+      this.fetchPlatforms();
     } catch (error) {
       console.error('Error fetching games:', error);  // Handle any errors
     }
   }
 
-  onSearch(): void {
-    if (this.searchQuery) {
-      this.filteredGames = this.games.filter(game => {
-        // Only filter games that have a valid title
-        if (!game.title) {
-          return false; // Exclude games without a title
-        }
-  
-        const title = game.title.toLowerCase();
-        const shortDescription = game.shortDescription ? game.shortDescription.toLowerCase() : '';
-        const genre = game.genre ? game.genre.toLowerCase() : '';
-        const developer = game.developer ? game.developer.toLowerCase() : '';
-  
-        return title.includes(this.searchQuery.toLowerCase()) || 
-               shortDescription.includes(this.searchQuery.toLowerCase()) || 
-               genre.includes(this.searchQuery.toLowerCase()) ||
-               developer.includes(this.searchQuery.toLowerCase()); // Add more fields as needed
-      });
-    } else {
-      // If the search input is cleared, show all games
-      this.filteredGames = this.games.filter(game => game.title); // Only include games with a title
-    }
+  fetchGenres(): void {
+    this.game_service.getAllGamesGenres().subscribe(
+      (genres: any[]) => this.genres = genres,
+      error => console.error('Error fetching genres:', error)
+    );
   }
+
+  fetchPlatforms(): void {
+    this.game_service.getAllGamesPlatforms().subscribe(
+      (platforms: any[]) => this.platforms = platforms,
+      error => console.error('Error fetching platforms:', error)
+    );
+  }
+
+  onSearch(): void {
+    this.filterGames();
+  }
+
+  onFilterChange(): void {
+    this.filterGames();
+  }
+
+  filterGames(): void {
+    this.filteredGames = this.games.filter(game => {
+      const matchesTitle = this.searchQuery ? game.title?.toLowerCase().includes(this.searchQuery.toLowerCase()) : true;
+      const matchesGenre = this.selectedGenre ? game.genre === this.selectedGenre : true;
+      const matchesPlatform = this.selectedPlatform ? game.platform === this.selectedPlatform : true;
+
+      return matchesTitle && matchesGenre && matchesPlatform;
+    });
+  }
+
+  // onSearch(): void {
+  //   if (this.searchQuery) {
+  //     this.filteredGames = this.games.filter(game => {
+  //       // Only filter games that have a valid title
+  //       if (!game.title) {
+  //         return false; // Exclude games without a title
+  //       }
+  
+  //       const title = game.title.toLowerCase();
+  //       const shortDescription = game.shortDescription ? game.shortDescription.toLowerCase() : '';
+  //       const genre = game.genre ? game.genre.toLowerCase() : '';
+  //       const developer = game.developer ? game.developer.toLowerCase() : '';
+  
+  //       return title.includes(this.searchQuery.toLowerCase()) || 
+  //              shortDescription.includes(this.searchQuery.toLowerCase()) || 
+  //              genre.includes(this.searchQuery.toLowerCase()) ||
+  //              developer.includes(this.searchQuery.toLowerCase()); // Add more fields as needed
+  //     });
+  //   } else {
+  //     // If the search input is cleared, show all games
+  //     this.filteredGames = this.games.filter(game => game.title); // Only include games with a title
+  //   }
+  // }
   
   
 
