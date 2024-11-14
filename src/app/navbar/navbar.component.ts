@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router'; // Import RouterModule
-import { UserServiceService } from '../../app/services/user_services/user-service.service';  // Import your user service~
+import { CommonModule } from '@angular/common'; // Import CommonModule
+import { UserServiceService } from '../../app/services/user_services/user-service.service';  // Import your user service
 import { UserProfile } from '../profile/profile.component';
 
 @Component({
@@ -38,7 +39,17 @@ import { UserProfile } from '../profile/profile.component';
         <!-- User avatar and name -->
         <div class="user-profile flex items-center space-x-2">
           <a [routerLink]="'/profile'" class="flex items-center space-x-2">
-            <img [src]="userProfile.avatar" alt="User Avatar" class="h-10 w-10 rounded-full">
+            <!-- Conditionally render image or first letter of user's name -->
+            <ng-container *ngIf="userProfile.avatar; else fallbackAvatar">
+              <img [src]="userProfile.avatar" alt="User Avatar" class="h-10 w-10 rounded-full">
+            </ng-container>
+            <ng-template #fallbackAvatar>
+              <div 
+                class="h-10 w-10 rounded-full flex items-center justify-center text-white" 
+                [ngStyle]="{'background-color': randomColor}">
+                {{ userProfile.name ? userProfile.name.charAt(0).toUpperCase() : '?' }}
+              </div>
+            </ng-template>
             <span class="text-black">{{ userProfile.name }}</span>
           </a>
         </div>
@@ -46,7 +57,7 @@ import { UserProfile } from '../profile/profile.component';
     </nav>
   `,
   styleUrls: ['./navbar.component.css'],
-  imports: [RouterModule] // Add RouterModule here
+  imports: [RouterModule, CommonModule] // Add RouterModule here
 })
 export class NavbarComponent implements OnInit {
 
@@ -58,14 +69,26 @@ export class NavbarComponent implements OnInit {
     avatar: '',
     lists: []
   };
+  randomColor: string = '';
 
   constructor(private user_service: UserServiceService) {}
 
   async ngOnInit() {
     try {
-      this.userProfile = await this.user_service.getUserProfile();  // Await the Promise to get the games
+      this.userProfile = await this.user_service.getUserProfile();  // Await the Promise to get the user profile
+      this.generateRandomColor(); // Generate random color if no avatar is available
     } catch (error) {
-      console.error('Error fetching games:', error);  // Handle any errors
+      console.error('Error fetching user profile:', error);  // Handle any errors
     }
+  }
+
+  // Generate a random color for the fallback avatar
+  generateRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    this.randomColor = color;
   }
 }

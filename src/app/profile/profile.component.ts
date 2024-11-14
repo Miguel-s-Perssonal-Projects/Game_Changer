@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
@@ -6,6 +6,8 @@ import { UserServiceService } from '../../app/services/user_services/user-servic
 
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';  // Import FormsModule
 import { CommonModule } from '@angular/common'; // Import CommonModule for ngIf and other common directives
+
+import { CustomModalComponent } from '../custom-modal/custom-modal.component';
 
 export interface UserProfile {
   id: string;
@@ -33,7 +35,7 @@ export interface UserList {
         <h1 class="title">Update Profile</h1>
         <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
 
-          <div class="form-group">
+          <div class="form-group" hidden>
             <label for="id">ID:</label>
             <input type="text" formControlName="id" class="input-field">
           </div>
@@ -66,11 +68,15 @@ export interface UserList {
       </div>
     </div>
 
+    <!-- Modal Component -->
+    <app-custom-modal #modal></app-custom-modal>
+
   `,
   styleUrls: ['./profile.component.css'],
-  imports: [NavbarComponent, FormsModule, CommonModule, ReactiveFormsModule]  // Import CommonModule for ngIf
+  imports: [NavbarComponent, FormsModule, CommonModule, ReactiveFormsModule, CustomModalComponent]  // Import CommonModule for ngIf
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild('modal') modal!: CustomModalComponent;  // Reference to the custom modal
 
   userProfile: UserProfile = {
     id: '',
@@ -81,15 +87,15 @@ export class ProfileComponent implements OnInit {
     lists: []
   };
 
-  myForm: FormGroup = new FormGroup(
-    {
-      id: new FormControl('', [Validators.required]),
-      name: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required]),
-      avatar: new FormControl('', [Validators.required]),
-      lists: new FormControl([], [Validators.required])
-    });
+  myForm: FormGroup = new FormGroup({
+    id: new FormControl('', [Validators.required]),
+    name: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]), // Optional email validator
+    password: new FormControl('', [Validators.required]),
+    avatar: new FormControl(''),
+    lists: new FormControl([]) // Optional: remove the required validator if it's causing issues
+  });
+  
 
   // Spectrum of greens and black shades
   private colors = [
@@ -176,15 +182,20 @@ export class ProfileComponent implements OnInit {
   // Method to handle form submission
   onSubmit() {
     if (!this.myForm.invalid) {
-
-        this.user_service.updateProfile(this.myForm.getRawValue()).subscribe({
-            next: (data) => {
-                this.router.navigate(['/home']);
-            },
-            error: (error) => {
-                console.log('Algo deu errado:', error);
-            }
-        });
+      console.log('Form submitted with values:', this.myForm.getRawValue());
+      this.user_service.updateProfile(this.myForm.getRawValue()).subscribe({
+        next: (data) => {
+          this.modal.openModal('Profile updated successfully!');  // Show success message in modal
+          console.log('Profile updated successfully:', data);
+        },
+        error: (error) => {
+          console.error('Error updating profile:', error);
+          this.modal.openModal('Failed to update profile. Please try again.');  // Show error message in modal
+        }
+      });
+    } else {
+      console.warn('Form is invalid, submission prevented.');
     }
-}
+  }
+  
 }

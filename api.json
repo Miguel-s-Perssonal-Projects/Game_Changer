@@ -1,19 +1,16 @@
 {
   "profile": {
     "id": "06c2",
-    "name": "Zé Povinho",
-    "email": "zpovinho@mail.pt",
+    "name": "O MELHOR",
+    "email": "zamorim@mail.pt",
     "password": "123456",
-    "avatar": "https://avatars.steamstatic.com/b32358b1a0f188ff07656a0c265b5af916224e96_full.jpg",
+    "avatar": "",
     "lists": [
       {
         "id": "emif",
         "name": "Play Later",
         "gamesIds": [
-          "12",
-          "340",
-          "523",
-          "540"
+          "523"
         ]
       },
       {
@@ -21,8 +18,7 @@
         "name": "Currently Playing",
         "gamesIds": [
           "582",
-          "11",
-          "508"
+          "11"
         ]
       },
       {
@@ -37,7 +33,7 @@
         "name": "Completed",
         "gamesIds": [
           "522",
-          "475"
+          "508"
         ]
       }
     ]
@@ -354,246 +350,6 @@
       "developer": "Gaijin Entertainment",
       "releaseDate": "2013-08-15",
       "freetogameProfileUrl": "https://www.freetogame.com/war-thunder"
-    },
-    {
-      "id": "0f68",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "3c16",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "3d42",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "2e8c",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "f795",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "4787",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "6e28",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "5ba9",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "e76f",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "3f3c",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "0432",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "e349",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "c9a9",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "56e8",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "af22",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "3090",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "6662",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "c874",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "b066",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "4501",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "5ec2",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "9936",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "c55f",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "4590",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "f652",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "1111",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "d446",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "c83a",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "7c28",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "a58e",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "fafd",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "6041",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "88b8",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "b00a",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "9515",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "bfca",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "890b",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "2125",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "2976",
-      "gameIds": [
-        "511"
-      ]
-    },
-    {
-      "id": "a6b7",
-      "gameIds": [
-        "511"
-      ]
     }
   ],
   "gameDetails": [

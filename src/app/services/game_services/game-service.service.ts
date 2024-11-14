@@ -116,8 +116,9 @@ export class GameServiceService {
       // Update the profile with the modified list
       await this.user_service.updateProfile(profile).toPromise();
       console.log(`${gameId} has been added to the ${listName} list.`);
+      alert('SUCESS! You manage to add the game to the list!');
 
-      this.router.navigate([listName]);
+      // this.router.navigate([listName]);
 
     } catch (error) {
       console.error('Error adding game to list:', error);
@@ -152,7 +153,7 @@ async removeGameFromList(gameId: string, listName: string): Promise<void> {
     console.log(`${gameId} has been removed from the ${listName} list.`);
 
     // Optionally navigate to the updated list
-    this.router.navigate([listName]);
+    // this.router.navigate([listName]);
 
   } catch (error) {
     console.error('Error removing game from list:', error);

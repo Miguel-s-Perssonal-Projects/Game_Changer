@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common'; // Import CommonModule
 import { isPlatformBrowser } from '@angular/common';
@@ -9,6 +9,7 @@ import { GameServiceService } from '../../app/services/game_services/game-servic
 import { UserList } from '../profile/profile.component';
 import { UserServiceService } from '../services/user_services/user-service.service';
 import { MatIconModule } from '@angular/material/icon';
+import { CustomModalComponent } from '../custom-modal/custom-modal.component';
 
 
 @Component({
@@ -93,12 +94,17 @@ import { MatIconModule } from '@angular/material/icon';
         </div>
       </div>
 
+    <!-- Modal Component -->
+    <app-custom-modal #modal></app-custom-modal>
+
   `,
   styleUrls: ['./game-details.component.css'],
   standalone: true,
-  imports: [CommonModule, NavbarComponent, MatIconModule,] // Import CommonModule to use ngIf
+  imports: [CommonModule, NavbarComponent, MatIconModule, CustomModalComponent] // Import CommonModule to use ngIf
 })
 export class GameDetailComponent implements OnInit {
+  @ViewChild('modal') modal!: CustomModalComponent;  // Reference to the custom modal
+  
   game: Game | null = null;
   lists: any[] = [];
   gameId: string | null = null;
@@ -159,8 +165,10 @@ export class GameDetailComponent implements OnInit {
     if (this.gameId) {
       const isInCurrentList = this.isCurrentList(list);
       if (isInCurrentList) {
+        this.modal.openModal('SUCESS! You manage to remove the game to the list!');
         this.removeFromList(list.name); // Call remove function if game is in the current list
       } else {
+        this.modal.openModal('SUCESS! You manage to add the game to the list!');
         this.addToList(list.name); // Call add function if game is not in the list
       }
     }
