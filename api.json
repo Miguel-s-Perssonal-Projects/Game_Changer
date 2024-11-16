@@ -1,7 +1,7 @@
 {
   "profile": {
     "id": "06c2",
-    "name": "OraPois",
+    "name": "OraPoi",
     "email": "OPois@mail.pt",
     "password": "123456",
     "avatar": "https://static.vecteezy.com/ti/vetor-gratis/t2/9784979-futebol-bola-icone-isolado-em-fundo-branco-gratis-vetor.jpg",
@@ -27,7 +27,8 @@
         "name": "Played",
         "gamesIds": [
           "511",
-          "516"
+          "516",
+          "508"
         ]
       },
       {
