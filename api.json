@@ -1,16 +1,16 @@
 {
   "profile": {
     "id": "06c2",
-    "name": "O MELHOR",
-    "email": "zamorim@mail.pt",
+    "name": "OraPois",
+    "email": "OPois@mail.pt",
     "password": "123456",
-    "avatar": "",
+    "avatar": "https://static.vecteezy.com/ti/vetor-gratis/t2/9784979-futebol-bola-icone-isolado-em-fundo-branco-gratis-vetor.jpg",
     "lists": [
       {
         "id": "emif",
         "name": "Play Later",
         "gamesIds": [
-          "523"
+          "517"
         ]
       },
       {
@@ -18,22 +18,24 @@
         "name": "Currently Playing",
         "gamesIds": [
           "582",
-          "11"
+          "11",
+          "522"
         ]
       },
       {
         "id": "9ou3",
         "name": "Played",
         "gamesIds": [
-          "511"
+          "511",
+          "516"
         ]
       },
       {
         "id": "gypq",
         "name": "Completed",
         "gamesIds": [
-          "522",
-          "508"
+          "340",
+          "5"
         ]
       }
     ]

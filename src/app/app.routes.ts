@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component'; // Adjust the path as needed
+//import { HomeComponent } from './home/home.component'; // Adjust the path as needed
 import { GamesComponent } from './games/games.component';
 import { NowPlayGamesComponent } from './lists/now-play-games/now-play-games.component';
 import { LatePlayGamesComponent } from './lists/late-play-games/late-play-games.component';
@@ -11,9 +11,8 @@ import { ComingSoonComponent } from './comingsoon/comingsoon.component';
 import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [ // Ensure routes are exported
-  { path: '', component: HomeComponent }, // Default route
-  { path: 'home', component: HomeComponent }, 
-  { path: 'games', component: GamesComponent },
+  { path: '', component: GamesComponent }, // Default route
+  { path: 'home', component: GamesComponent }, 
   { path: 'Played', component: PlayedGamesComponent },
   { path: 'Completed', component: FinishedGamesComponent },
   { path: 'Currently Playing', component: NowPlayGamesComponent },
