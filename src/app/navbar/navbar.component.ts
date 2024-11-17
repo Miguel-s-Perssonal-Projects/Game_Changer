@@ -20,8 +20,7 @@ import { UserProfile } from '../profile/profile.component';
         <!-- Navigation links -->
         <ul class="flex justify-center space-x-4">
           <li><a class="hover:text-white-300" routerLink="/home">Home</a></li>
-          <li><a class="hover:text-white-300" routerLink="/games">Game List</a></li>
-          
+                    
           <!-- Dropdown for the Play Later section -->
           <li class="relative">
             <a class="hover:text-white-300" routerLink="/games">Play Games</a>

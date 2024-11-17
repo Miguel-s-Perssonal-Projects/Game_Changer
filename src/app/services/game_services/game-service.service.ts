@@ -116,8 +116,6 @@ export class GameServiceService {
       // Update the profile with the modified list
       await this.user_service.updateProfile(profile).toPromise();
       console.log(`${gameId} has been added to the ${listName} list.`);
-      alert('SUCESS! You manage to add the game to the list!');
-
       // this.router.navigate([listName]);
 
     } catch (error) {
