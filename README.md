@@ -26,8 +26,8 @@ To run this project locally, follow these steps:
 Clone the repository to your local machine:
 
 ```bash
-git clone git@github.com:Miguel-s-Perssonal-Projects/Angular_project.git
-cd Angular_project
+git clone git@github.com:Miguel-s-Perssonal-Projects/Game_Changer.git
+cd Game_Changer
 ```
 
 ## Install Dependencies
